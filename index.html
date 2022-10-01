@@ -1,45 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C&R Portfolio Website</title>
-  <link rel="stylesheet" href="./main.css">
-</head>
-<body>
-<h2>Websites der Teilnehmer</h2>
-<ul>
-  <li>
-    <a href="https://krabby21.github.io/">Florian</a>
-    <p>Anfang Chapter 2</p>
-  </li>
-  <li>
-    <a href="https://hendrikfley.github.io/">Hendrik</a>
-    <p>Anfang Chapter 2</p>
-  </li>
-  <li>
-    <a href="https://riomos.github.io/">Mario</a>
-    <p>Ende Chapter 1</p>
-  </li>
-  <li>
-    <a href="https://timokue.github.io/">Timo</a>
-    <p>Anfang Chapter 2</p>
-  </li>
-  <li>
-    <a href="https://tartarov.github.io">Tim</a>
-    <p>
-      Schon ein bisschen weiter, Chapter 1-3 ueberflogen
-    </p>
-  </li>
-  <li>
-    <a href="https://adrosmc.github.io/">Adrian</a>
-    <p>
-      Chapter 2
-    </p>
-  </li>
-</ul>
-<script>
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C&R Portfolio Website</title>
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+    <script src="./dates.js"></script>
+    <script src="./cpu_counter.js"></script>
+  </head>
+  <!-- main window -->
+  <body>
+    <div id="main-window" class="window">
+      <!-- title bar -->
+      <div class="title-bar">
+        <div class="title-bar-text">Course members</div>
+        <div class="title-bar-controls">
+          <!-- <button id="minimize-main-window" aria-label="Minimize"></button> -->
+          <!-- <button id="maximize-main-window" aria-label="Maximize"></button> -->
+          <button id="close-main-window" aria-label="Close"></button>
+        </div>
+      </div>
+
+      <!-- window body -->
+      <div class="window-body">
+        <section class="tabs">
+          <menu role="tablist" aria-label="Sample Tabs">
+            <button role="tab" aria-selected="true" aria-controls="tab-A">
+              Links & Progress
+            </button>
+            <button role="tab" aria-controls="tab-B">Useful Links</button>
+            <button role="tab" aria-controls="tab-C">Exercises</button>
+          </menu>
+          <!-- the tab content -->
+          <article role="tabpanel" id="tab-A">
+            <h3>Portfolio Pages Link</h3>
+            <ul>
+              <li>
+                <a href="https://krabby21.github.io/">Florian</a>
+                <p>Anfang Chapter 2</p>
+              </li>
+              <li>
+                <a href="https://hendrikfley.github.io/">Hendrik</a>
+                <p>Anfang Chapter 2</p>
+              </li>
+              <li>
+                <a href="https://riomos.github.io/">Mario</a>
+                <p>Ende Chapter 1</p>
+              </li>
+              <li>
+                <a href="https://timokue.github.io/">Timo</a>
+                <p>Anfang Chapter 2</p>
+              </li>
+              <li>
+                <a href="https://tartarov.github.io">Tim</a>
+                <p>Schon ein bisschen weiter, Chapter 1-3 ueberflogen</p>
+              </li>
+              <li>
+                <a href="https://adrosmc.github.io/">Adrian</a>
+                <p>Chapter 2</p>
+              </li>
+            </ul>
+          </article>
+          <article role="tabpanel" hidden id="tab-B">
+            <h3>Useful Links</h3>
+            <h4>Tutorials</h4>
+            <ul>
+              <li><a href="https://www.internetingishard.com/">Course Tutorial</a></li>
+              <li><a href="https://www.w3schools.com/html/default.asp">Oldschool HTML interactive Tutorial</a></li>
+            </ul>
+            <h4>Documentation</h4>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/">MDN Web Docs</a></li>
+            </ul>
+          </article>
+          <article role="tabpanel" hidden id="tab-C">
+            <h3>Exercises</h3>
+            <p>coming soon...</p>
+          </article>
+        </section>
+      </div>
+      <div class="status-bar">
+        <p id="next-date-field" class="status-bar-field">next Date: </p>
+        <p class="status-bar-field">Tutorial Progress: Chapter 2</p>
+        <p id="cpu-counter" class="status-bar-field">CPU Usage: 14%</p>
+      </div>
+    </div>
+
+    <script>
+      //get next date
+      const nextDateField = document.querySelector("#next-date-field")
+      nextDateField.innerHTML = `next meetup: ${nextDate}`
+
+      const closeButton = document.querySelector("#close-main-window");
+      closeButton.addEventListener("click", () => window.close());
+
+      //snippet required for tab functionality
+      //copied from
+      window.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll('[role="tab"]');
+        const tabList = document.querySelector('[role="tablist"]');
+
+        // Add a click event handler to each tab
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", changeTabs);
+        });
+
+        // Enable arrow navigation between tabs in the tab list
+        let tabFocus = 0;
+
+        tabList.addEventListener("keydown", (e) => {
+          // Move right
+          if (e.keyCode === 39 || e.keyCode === 37) {
+            tabs[tabFocus].setAttribute("tabindex", -1);
+            if (e.keyCode === 39) {
+              tabFocus++;
+              // If we're at the end, go to the start
+              if (tabFocus >= tabs.length) {
+                tabFocus = 0;
+              }
+              // Move left
+            } else if (e.keyCode === 37) {
+              tabFocus--;
+              // If we're at the start, move to the end
+              if (tabFocus < 0) {
+                tabFocus = tabs.length - 1;
+              }
+            }
+
+            tabs[tabFocus].setAttribute("tabindex", 0);
+            tabs[tabFocus].focus();
+          }
+        });
+      });
+
+      function changeTabs(e) {
+        const target = e.target;
+        const parent = target.parentNode;
+        const grandparent = parent.parentNode;
+
+        // Remove all current selected tabs
+        parent
+          .querySelectorAll('[aria-selected="true"]')
+          .forEach((t) => t.setAttribute("aria-selected", false));
+
+        // Set this tab as selected
+        target.setAttribute("aria-selected", true);
+
+        // Hide all tab panels
+        grandparent
+          .querySelectorAll('[role="tabpanel"]')
+          .forEach((p) => p.setAttribute("hidden", true));
+
+        // Show the selected panel
+        grandparent.parentNode
+          .querySelector(`#${target.getAttribute("aria-controls")}`)
+          .removeAttribute("hidden");
+      }
+    </script>
+  </body>
 </html>
